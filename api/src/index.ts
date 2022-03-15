@@ -1,25 +1,13 @@
 import { ApolloServer } from 'apollo-server'
+import path from 'path'
+import { readFileSync } from 'fs'
+import resolvers from './resolvers'
 
-// 1. Query
-const typeDefs = `
-    type Query {
-        info:String!
-    }
-`
+const typeDefs = readFileSync(path.join(__dirname, 'schema.graphql'), 'utf8')
 
-// 2. resolvers
-const resolvers = {
-    Query: {
-        info: () => 'Esta es la Api de GraphQL'
-    }
-}
-
-// iniciar servidor
 const server = new ApolloServer({
-    typeDefs,
-    resolvers
+  typeDefs,
+  resolvers,
 })
 
-server.listen({ port: 4000 }, () =>
-  console.log(`🚀 Server ready at http://localhost:4000/graphql`)
-);
+server.listen().then(({ url }) => console.log(`Server is running on ${url}`))
